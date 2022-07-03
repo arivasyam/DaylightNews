@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardResep"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:layout_margin="10dp"
+    android:elevation="20dp"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="10dp"
+    app:cardMaxElevation="12dp"
+    style="@style/CardView.Dark"
+    app:cardUseCompatPadding="false">
+
+    <ImageView
+        android:id="@+id/image_headline_news"
+        android:layout_width="300dp"
+        android:layout_height="150dp"
+        android:cropToPadding="false"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/sample_news_image" />
+
+    <TextView
+        android:id="@+id/title_headline_news"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@font/alata"
+        android:gravity="start"
+        android:text="@string/news_source"
+        android:textColor="#858383"
+        android:textSize="11sp"
+        android:textStyle="bold" />
+
+</androidx.cardview.widget.CardView>
