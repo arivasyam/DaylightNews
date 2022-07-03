@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bottom_navigation"
-    app:startDestination="@id/dashboardFragment">
+    app:startDestination="@id/sourceFragment2">
 
     <fragment
         android:id="@+id/dashboardFragment"
@@ -39,5 +39,13 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/sourceFragment2"
+        android:name="com.example.daylightnews.ui.fragments.SourceFragment"
+        android:label="SourceFragment" >
+        <action
+            android:id="@+id/action_sourceFragment2_to_dashboardFragment"
+            app:destination="@id/dashboardFragment" />
     </fragment>
 </navigation>

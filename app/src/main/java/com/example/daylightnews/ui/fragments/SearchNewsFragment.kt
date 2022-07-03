@@ -16,7 +16,7 @@ import com.example.daylightnews.base.BaseFragment
 import com.example.daylightnews.ui.NewsActivity
 import com.example.daylightnews.utils.Resource
 import com.example.daylightnews.viewmodel.NewsVM
-import kotlinx.android.synthetic.main.fragment_dashboard.*
+//import kotlinx.android.synthetic.main.fragment_dashboard.*
 import kotlinx.android.synthetic.main.fragment_search_news.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
@@ -91,6 +91,16 @@ class SearchNewsFragment : BaseFragment() {
                 }
             }
         })
+    }
+
+    fun hideProgressBar(){
+        paginationProgressBar.visibility = View.INVISIBLE
+//        isLoading = false
+    }
+
+    fun showProgressBar(){
+        paginationProgressBar.visibility = View.VISIBLE
+//        isLoading = true
     }
     fun setupRecycleView(){
         newsAdapter = NewsAdapter()

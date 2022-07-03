@@ -23,12 +23,7 @@ class NewsActivity : BaseActivity() {
 //        val newsRepository = NewsRepository(NewsDatabase(this))
 //        val viewModelProviderFactory = NewsViewModelProviderFactory(newsRepository)
 //        viewModel = ViewModelProvider(this, viewModelProviderFactory).get(NewsVM::class.java)
-
         setContentView(R.layout.activity_news)
-
-
-
-
 
         bottomNavigationView.setupWithNavController(newsNavHostFragment.findNavController())
     }

@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsListView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -19,10 +20,13 @@ import com.example.daylightnews.model.Source
 import com.example.daylightnews.repository.NewsRepository
 import com.example.daylightnews.roomdb.NewsDatabase
 import com.example.daylightnews.ui.NewsActivity
+import com.example.daylightnews.utils.Constants.Companion.PAGE_SIZE
 import com.example.daylightnews.utils.Resource
 import com.example.daylightnews.viewmodel.NewsVM
 import com.example.daylightnews.viewmodel.NewsViewModelProviderFactory
+import kotlinx.android.synthetic.main.fragment_base.*
 import kotlinx.android.synthetic.main.fragment_dashboard.*
+import kotlinx.android.synthetic.main.fragment_dashboard.paginationProgressBar
 
 
 class DashboardFragment : BaseFragment() {
@@ -64,7 +68,9 @@ class DashboardFragment : BaseFragment() {
                     Log.d("success",response.data?.totalResults.toString())
                     hideProgressBar()
                     response.data?.let{ newsResponse ->
-                        newsAdapter.differ.submitList(newsResponse.articles)
+                        newsAdapter.differ.submitList(newsResponse.articles.toList())
+                        val totalPages = newsResponse.totalResults / PAGE_SIZE + 2
+                        isLastpage = viewModel.breakingNewsPage == totalPages
                     }
                 }
 
@@ -83,12 +89,59 @@ class DashboardFragment : BaseFragment() {
         })
    }
 
+    var isLoading = false
+    var isLastpage = false
+    var isScrolling = false
+
+
+    val scrollListener = object: RecyclerView.OnScrollListener(){
+        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+            super.onScrollStateChanged(recyclerView, newState)
+            if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL){
+                isScrolling = true
+            }
+        }
+
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+
+            val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+            val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+            val visibleItemCount = layoutManager.childCount
+            val totalItemCount = layoutManager.itemCount
+
+            val isNotLoadingAndNotLastPage = !isLoading && !isLastpage
+            val isAtLastItem = firstVisibleItemPosition + visibleItemCount >= totalItemCount
+            val isNotAtBeginning = firstVisibleItemPosition >= 0
+            val isTotalMoreThanVisible = totalItemCount >= PAGE_SIZE
+
+            val shouldPaginate = isNotLoadingAndNotLastPage && isAtLastItem && isNotAtBeginning && isTotalMoreThanVisible && isScrolling
+
+            if(shouldPaginate){
+                viewModel.getBreakingNews("us")
+                isScrolling = false
+            }else{
+                rcBreakingNews.setPadding(0,0,0,0)
+            }
+        }
+    }
+
+    fun hideProgressBar(){
+        paginationProgressBar.visibility = View.INVISIBLE
+        isLoading = false
+    }
+
+    fun showProgressBar(){
+        paginationProgressBar.visibility = View.VISIBLE
+        isLoading = true
+    }
 
     fun setupRecycleView(){
         newsAdapter = NewsAdapter()
         rcBreakingNews.apply {
             adapter = newsAdapter
             layoutManager = LinearLayoutManager(activity)
+            addOnScrollListener(this@DashboardFragment.scrollListener)
         }
     }
 

@@ -1,5 +1,10 @@
 package com.example.daylightnews.model
 
+import androidx.room.Entity
+import java.io.Serializable
+
+
+@Entity(tableName = "sourcex")
 data class SourceX(
     val category: String,
     val country: String,
@@ -8,4 +13,4 @@ data class SourceX(
     val language: String,
     val name: String,
     val url: String
-)
+):Serializable
