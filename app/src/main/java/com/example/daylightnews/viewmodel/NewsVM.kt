@@ -13,11 +13,16 @@ class NewsVM (val newsRepository : NewsRepository) : ViewModel() {
 
     val breakingNews : MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
     var breakingNewsPage = 1
+
+    val headNews : MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
+    var headNewsPage = 1
+
     val searchNews : MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
     var searchNewsPage = 1
 
     var breakingNewsResponse: NewsResponse? = null
     var searchNewsResponse: NewsResponse? = null
+    var headNewsResponse: NewsResponse? = null
 
 
     init {
@@ -30,6 +35,12 @@ class NewsVM (val newsRepository : NewsRepository) : ViewModel() {
         breakingNews.postValue(handleBreakingNewsResponse(response))
     }
 
+    fun getNews(category: String) = viewModelScope.launch {
+        headNews.postValue(Resource.Loading())
+        val response = newsRepository.getnews(category, headNewsPage)
+        headNews.postValue(handleBreakingNewsResponse(response))
+    }
+
     fun searchNews(searchQuery: String) = viewModelScope.launch {
         searchNews.postValue(Resource.Loading())
         val response = newsRepository.searchNews(searchQuery,searchNewsPage)
@@ -40,7 +51,24 @@ class NewsVM (val newsRepository : NewsRepository) : ViewModel() {
         if(response.isSuccessful){
             response.body()?.let{ resultResponse ->
                 breakingNewsPage++
-                if(breakingNewsResponse == null){
+                if(headNewsResponse == null){
+                    headNewsResponse = resultResponse
+                }else{
+                    val oldArticles = headNewsResponse?.articles
+                    val newArticles = resultResponse.articles
+                    oldArticles?.addAll(newArticles)
+                }
+                return Resource.Success(headNewsResponse ?: resultResponse)
+            }
+        }
+        return Resource.Error(response.message())
+    }
+
+    private fun handleHeadNewsResponse(response: Response<NewsResponse>): Resource<NewsResponse>{
+        if(response.isSuccessful){
+            response.body()?.let{ resultResponse ->
+                headNewsPage++
+                if(headNewsResponse == null){
                     breakingNewsResponse = resultResponse
                 }else{
                     val oldArticles = breakingNewsResponse?.articles

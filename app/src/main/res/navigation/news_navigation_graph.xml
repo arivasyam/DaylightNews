@@ -17,6 +17,9 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+        <argument
+            android:name="source"
+            app:argType="com.example.daylightnews.model.SourceX" />
     </fragment>
     <fragment
         android:id="@+id/articleFragment"

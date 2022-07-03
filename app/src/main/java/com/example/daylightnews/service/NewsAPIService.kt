@@ -22,5 +22,7 @@ interface NewsAPIService {
     suspend fun getSourceNews(@Query("page") pageNumber: Int = 1,
                                 @Query("apiKey") apiKey:String = NEWS_API_KEY): Response<SourceResponse>
 
-
+    @GET("v2/top-headlines")
+    suspend fun getNews(@Query("category") category: String,@Query("page") pageNumber: Int = 1,
+                                @Query("apiKey") apiKey:String = NEWS_API_KEY): Response<NewsResponse>
 }

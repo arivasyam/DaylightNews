@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.daylightnews.R
@@ -24,13 +25,19 @@ import com.example.daylightnews.utils.Constants.Companion.PAGE_SIZE
 import com.example.daylightnews.utils.Resource
 import com.example.daylightnews.viewmodel.NewsVM
 import com.example.daylightnews.viewmodel.NewsViewModelProviderFactory
+import kotlinx.android.synthetic.main.article_holder.*
 import kotlinx.android.synthetic.main.fragment_base.*
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import kotlinx.android.synthetic.main.fragment_dashboard.paginationProgressBar
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 
 class DashboardFragment : BaseFragment() {
     val TAG = "Breaking News Fragment"
+    val args : DashboardFragmentArgs by navArgs()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +51,9 @@ class DashboardFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         initVm()
         setupRecycleView()
+        val source = args.source
+
+
 
         newsAdapter.setOnItemClickListener {
             val bundle = Bundle()
@@ -62,12 +72,15 @@ class DashboardFragment : BaseFragment() {
 //       val viewModelProviderFactory = NewsViewModelProviderFactory(newsRepository)
 //       viewModel = ViewModelProvider(this, viewModelProviderFactory).get(NewsVM::class.java)
 //
+
        viewModel.breakingNews.observe(viewLifecycleOwner, Observer{ response ->
             when(response){
                 is Resource.Success -> {
                     Log.d("success",response.data?.totalResults.toString())
                     hideProgressBar()
+
                     response.data?.let{ newsResponse ->
+
                         newsAdapter.differ.submitList(newsResponse.articles.toList())
                         val totalPages = newsResponse.totalResults / PAGE_SIZE + 2
                         isLastpage = viewModel.breakingNewsPage == totalPages
