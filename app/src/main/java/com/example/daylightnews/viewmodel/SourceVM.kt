@@ -15,9 +15,9 @@ class SourceVM(val sourceRepository : SourceRepository) : ViewModel() {
     var sourceNews : MutableLiveData<Resource<SourceResponse>> = MutableLiveData()
     var sourcePage = 1
     var sourceNewsResponse: SourceResponse? = null
-    init {
-        getSourceNews("general")
-    }
+//    init {
+//        getSourceNews("general")
+//    }
 
     fun getSourceNews(category:String) = viewModelScope.launch {
             sourceNews.postValue(Resource.Loading())
