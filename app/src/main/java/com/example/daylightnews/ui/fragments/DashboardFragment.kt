@@ -2,14 +2,12 @@ package com.example.daylightnews.ui.fragments
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
+import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,21 +15,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.daylightnews.R
 import com.example.daylightnews.adapter.NewsAdapter
 import com.example.daylightnews.base.BaseFragment
-import com.example.daylightnews.model.Source
-import com.example.daylightnews.repository.NewsRepository
-import com.example.daylightnews.roomdb.NewsDatabase
-import com.example.daylightnews.ui.NewsActivity
 import com.example.daylightnews.utils.Constants.Companion.PAGE_SIZE
 import com.example.daylightnews.utils.Resource
-import com.example.daylightnews.viewmodel.NewsVM
-import com.example.daylightnews.viewmodel.NewsViewModelProviderFactory
-import kotlinx.android.synthetic.main.article_holder.*
-import kotlinx.android.synthetic.main.fragment_base.*
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import kotlinx.android.synthetic.main.fragment_dashboard.paginationProgressBar
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
 
 
 class DashboardFragment : BaseFragment() {
@@ -52,6 +39,8 @@ class DashboardFragment : BaseFragment() {
         initVm()
         setupRecycleView()
         val source = args.source
+        Toast.makeText(activity,"category headline news-> ${source.category}",Toast.LENGTH_SHORT).show()
+        viewModel.getNews(source.category)
 
 
 
@@ -78,8 +67,14 @@ class DashboardFragment : BaseFragment() {
                 is Resource.Success -> {
                     Log.d("success",response.data?.totalResults.toString())
                     hideProgressBar()
-
+//                    var i = 0
                     response.data?.let{ newsResponse ->
+//                        if(newsResponse.articles.get(i).source?.name == name){
+//                            newsAdapter.differ.submitList(newsResponse.articles.toList())
+//                            val totalPages = newsResponse.totalResults / PAGE_SIZE + 2
+//                            isLastpage = viewModel.breakingNewsPage == totalPages
+//                        }
+//                        Log.d("loop","$i")
 
                         newsAdapter.differ.submitList(newsResponse.articles.toList())
                         val totalPages = newsResponse.totalResults / PAGE_SIZE + 2

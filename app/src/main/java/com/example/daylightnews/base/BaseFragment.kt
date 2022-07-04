@@ -9,12 +9,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.daylightnews.R
+import com.example.daylightnews.adapter.CategoryAdapter
 import com.example.daylightnews.adapter.NewsAdapter
 import com.example.daylightnews.adapter.SourceAdapter
 import com.example.daylightnews.repository.NewsRepository
 import com.example.daylightnews.repository.SourceRepository
 import com.example.daylightnews.roomdb.NewsDatabase
 import com.example.daylightnews.ui.NewsActivity
+import com.example.daylightnews.ui.fragments.CategoryFragment
 import com.example.daylightnews.ui.fragments.SearchNewsFragment
 import com.example.daylightnews.viewmodel.NewsVM
 import com.example.daylightnews.viewmodel.NewsViewModelProviderFactory
@@ -28,6 +30,7 @@ import kotlinx.android.synthetic.main.fragment_base.*
 open class BaseFragment : Fragment() {
     lateinit var newsAdapter:NewsAdapter
     lateinit var sourceAdapter:SourceAdapter
+    lateinit var categoryAdapter: CategoryAdapter
     lateinit var viewModel:NewsVM
     lateinit var sViewModel : SourceVM
 

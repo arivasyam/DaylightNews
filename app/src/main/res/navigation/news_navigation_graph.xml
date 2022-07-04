@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bottom_navigation"
-    app:startDestination="@id/sourceFragment2">
+    app:startDestination="@id/categoryFragment">
 
     <fragment
         android:id="@+id/dashboardFragment"
@@ -50,5 +50,17 @@
         <action
             android:id="@+id/action_sourceFragment2_to_dashboardFragment"
             app:destination="@id/dashboardFragment" />
+        <argument
+            android:name="category"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/categoryFragment"
+        android:name="com.example.daylightnews.ui.fragments.CategoryFragment"
+        android:label="CategoryFragment" >
+        <action
+            android:id="@+id/action_categoryFragment_to_sourceFragment2"
+            app:destination="@id/sourceFragment2" />
     </fragment>
 </navigation>

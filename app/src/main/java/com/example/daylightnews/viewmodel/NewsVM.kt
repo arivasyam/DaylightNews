@@ -38,7 +38,7 @@ class NewsVM (val newsRepository : NewsRepository) : ViewModel() {
     fun getNews(category: String) = viewModelScope.launch {
         headNews.postValue(Resource.Loading())
         val response = newsRepository.getnews(category, headNewsPage)
-        headNews.postValue(handleBreakingNewsResponse(response))
+        headNews.postValue(handleHeadNewsResponse(response))
     }
 
     fun searchNews(searchQuery: String) = viewModelScope.launch {
@@ -51,14 +51,14 @@ class NewsVM (val newsRepository : NewsRepository) : ViewModel() {
         if(response.isSuccessful){
             response.body()?.let{ resultResponse ->
                 breakingNewsPage++
-                if(headNewsResponse == null){
-                    headNewsResponse = resultResponse
+                if(breakingNewsResponse == null){
+                    breakingNewsResponse = resultResponse
                 }else{
-                    val oldArticles = headNewsResponse?.articles
+                    val oldArticles = breakingNewsResponse?.articles
                     val newArticles = resultResponse.articles
                     oldArticles?.addAll(newArticles)
                 }
-                return Resource.Success(headNewsResponse ?: resultResponse)
+                return Resource.Success(breakingNewsResponse ?: resultResponse)
             }
         }
         return Resource.Error(response.message())
@@ -69,13 +69,13 @@ class NewsVM (val newsRepository : NewsRepository) : ViewModel() {
             response.body()?.let{ resultResponse ->
                 headNewsPage++
                 if(headNewsResponse == null){
-                    breakingNewsResponse = resultResponse
+                    headNewsResponse = resultResponse
                 }else{
-                    val oldArticles = breakingNewsResponse?.articles
+                    val oldArticles = headNewsResponse?.articles
                     val newArticles = resultResponse.articles
                     oldArticles?.addAll(newArticles)
                 }
-                return Resource.Success(breakingNewsResponse ?: resultResponse)
+                return Resource.Success(headNewsResponse ?: resultResponse)
             }
         }
         return Resource.Error(response.message())

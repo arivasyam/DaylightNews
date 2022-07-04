@@ -7,8 +7,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.daylightnews.R
 import com.example.daylightnews.adapter.NewsAdapter
@@ -16,12 +19,20 @@ import com.example.daylightnews.adapter.SourceAdapter
 import com.example.daylightnews.base.BaseFragment
 import com.example.daylightnews.utils.Constants
 import com.example.daylightnews.utils.Resource
+import kotlinx.android.synthetic.main.fragment_search_news.*
 import kotlinx.android.synthetic.main.fragment_source.*
+import kotlinx.android.synthetic.main.fragment_source.paginationProgressBar
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 //import kotlinx.android.synthetic.main.fragment_search_news.*
 
 class SourceFragment : BaseFragment() {
 
+
+    val args : SourceFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,6 +46,8 @@ class SourceFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         initVM()
         setupRecycleView()
+        val category = args.category
+        Toast.makeText(activity,"category -> $category",Toast.LENGTH_SHORT).show()
 
         sourceAdapter.setOnItemClickListener {
             val bundle = Bundle().apply{
@@ -43,6 +56,8 @@ class SourceFragment : BaseFragment() {
             findNavController().navigate(R.id.action_sourceFragment2_to_dashboardFragment,bundle)
         }
 
+
+        sViewModel.getSourceNews(category.toString())
     }
 
     fun initVM(){

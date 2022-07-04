@@ -16,12 +16,12 @@ class SourceVM(val sourceRepository : SourceRepository) : ViewModel() {
     var sourcePage = 1
     var sourceNewsResponse: SourceResponse? = null
     init {
-        getSourceNews()
+        getSourceNews("general")
     }
 
-    fun getSourceNews() = viewModelScope.launch {
+    fun getSourceNews(category:String) = viewModelScope.launch {
             sourceNews.postValue(Resource.Loading())
-            val response = sourceRepository.getSourceNews(sourcePage)
+            val response = sourceRepository.getSourceNews(category,sourcePage)
             sourceNews.postValue(handleSourceNewsResponse(response))
     }
 

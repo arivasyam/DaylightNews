@@ -19,7 +19,7 @@ interface NewsAPIService {
                            @Query("apiKey") apiKey:String = NEWS_API_KEY): Response<NewsResponse>
 
     @GET("v2/top-headlines/sources")
-    suspend fun getSourceNews(@Query("page") pageNumber: Int = 1,
+    suspend fun getSourceNews(@Query("category") category: String, @Query("page") pageNumber: Int = 1,
                                 @Query("apiKey") apiKey:String = NEWS_API_KEY): Response<SourceResponse>
 
     @GET("v2/top-headlines")
